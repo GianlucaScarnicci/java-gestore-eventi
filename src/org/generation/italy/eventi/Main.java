@@ -1,6 +1,5 @@
 package org.generation.italy.eventi;
 
-
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -16,9 +15,11 @@ public class Main {
 		int disdette;
 		boolean riinizia = true;
 		while (riinizia) {
-			System.out.println("inserisci un nuovo evento");
-			System.out.print("inserisci un titolo");
-			titolo = scan.nextLine();
+			System.out.println("inserisci un nuovo evento ");
+			do {
+				System.out.print("inserisci un titolo non vuoto ");
+				titolo = scan.nextLine();
+			} while (titolo.length() == 0 || titolo == null);
 			System.out.println("inserisci la data dell'evento: yyyy-MM-dd");
 			dataInserita = scan.nextLine();
 
@@ -31,39 +32,40 @@ public class Main {
 
 					System.out.println("Quante prenotazioni vuoi fare? Devono essere minori dei posti totali");
 					prenotazioni = scan.nextInt();
-					for (int i = 0; i < prenotazioni; i++) {
-						try {
-							evento.prenota();
-						} catch (Exception e) {
-							e.getMessage();
+					if (prenotazioni < postiTotali) {
+						for (int i = 0; i < prenotazioni; i++) {
+							try {
+								evento.prenota();
+							} catch (Exception e) {
+								e.getMessage();
+							}
 						}
-
 					}
 				} while (prenotazioni > postiTotali);
 				System.out.println("i posti prenotati sono : " + evento.getPostiPrenotati());
 				int postiDisponibili = evento.getPostiTotali() - evento.getPostiPrenotati();
 				System.out.println("i posti disponibili sono :" + postiDisponibili);
-				prenotazioni=evento.getPostiPrenotati();
+				prenotazioni = evento.getPostiPrenotati();
 				do {
 
 					System.out.println("Quanti posti vuoi disdire?Non puoi disdire più posti di quelli che ci sono");
 					disdette = scan.nextInt();
-					
-					for (int i = 0; i < disdette; i++) {
-						try {
-							evento.disdici();
-						} catch (Exception e) {
-							e.getMessage();
+					if (disdette < prenotazioni) {
+						for (int i = 0; i < disdette; i++) {
+							try {
+								evento.disdici();
+							} catch (Exception e) {
+								e.getMessage();
+							}
 						}
-
 					}
-				} while (disdette>prenotazioni);
-				System.out.println("i posti prenotati sono : "+evento.getPostiPrenotati());
-				 postiDisponibili = evento.getPostiTotali() - evento.getPostiPrenotati();
+				} while (disdette > prenotazioni);
+				System.out.println("i posti prenotati sono : " + evento.getPostiPrenotati());
+				postiDisponibili = evento.getPostiTotali() - evento.getPostiPrenotati();
 				System.out.println("i posti disponibili sono :" + postiDisponibili);
 				riinizia = false;
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				System.out.println("Errore:La data è sbagliata o il numero di posti sono sbagliati");
 			}
 
 		}
